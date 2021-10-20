@@ -15,7 +15,7 @@ def test_apply_rate_to_cdr_with_correct_inputs():
 
     rate = { "energy": 0.3, "time": 2, "transaction": 1 }
     cdr = { "meterStart": 1204307, "timestampStart": "2021-04-05T10:04:00Z", "meterStop": 1215230, "timestampStop":"2021-04-05T11:27:00Z" }
-    response = client.post("/", json={"cdr": cdr, "rate": rate})
+    response = client.post("/rate", json={"cdr": cdr, "rate": rate})
     correct_response = {'components': {'energy': 3.277, 'time': 2.767, 'transaction': 1.0}, 
                         'overall': 7.04}
     assert response.status_code == 200
@@ -25,19 +25,19 @@ def test_apply_rate_to_cdr_with_incorrect_inputs():
 
     rate = { "energy": -0.3, "time": 2, "transaction": 1 }
     cdr = { "meterStart": 1204307, "timestampStart": "2021-04-05T10:04:00Z", "meterStop": 1215230, "timestampStop":"2021-04-05T11:27:00Z" }
-    response = client.post("/", json={"cdr": cdr, "rate": rate})
+    response = client.post("/rate", json={"cdr": cdr, "rate": rate})
     assert response.status_code == 422
 
     rate = { "energy": 0.3, "time": 2, "transaction": 1 }
     cdr = { "meterStart": 1204307, "timestampStart": "2021-04-05T10:04:00Z", "meterStop": 1215230, "timestampStop":"2021-04-05T10:03:59Z" }
-    response = client.post("/", json={"cdr": cdr, "rate": rate})
+    response = client.post("/rate", json={"cdr": cdr, "rate": rate})
     assert response.status_code == 422
 
 def test_apply_rate_to_cdr_with_missing_inputs():
 
     rate = { "energy": 0.3, "transaction": 1 }
     cdr = { "meterStart": 1204307, "timestampStart": "2021-04-05T10:04:00Z", "meterStop": 1215230, "timestampStop":"2021-04-05T11:27:00Z" }
-    response = client.post("/", json={"cdr": cdr, "rate": rate})
+    response = client.post("/rate", json={"cdr": cdr, "rate": rate})
     assert response.status_code == 422
 
 def test_time_handler():
