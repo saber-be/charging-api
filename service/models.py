@@ -15,7 +15,7 @@ class CDR(BaseModel):
     timestampStop: datetime.datetime = Field(
         ..., description="timestamp (according to ISO 8601) when the charging process was stopped")
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def check_meters(cls, values):
         meterStart, meterStop = values.get(
             'meterStart'), values.get('meterStop')
@@ -24,7 +24,7 @@ class CDR(BaseModel):
                 'cdr.meterStop should be greater than cdr.meterStart')
         return values
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def check_timestamps(cls, values):
         timestampStart, timestampStop = values.get(
             'timestampStart'), values.get('timestampStop')
